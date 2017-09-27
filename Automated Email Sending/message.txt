@@ -1,0 +1,7 @@
+Hello ${PERSON_NAME},
+
+This is an automated message sent using python script. Please do not reply to this email.
+Happy Coding!
+
+Regards,
+Your Name
