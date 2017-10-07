@@ -41,7 +41,12 @@ def download(file_name, url):
 
 
 def check(tv_anime, series_name, page_url, episode_name):
-    req = requests.get(page_url)
+    try:
+        req = requests.get(page_url)
+    except Exception as e:
+        print(tv_anime)
+        print('Failed to establish a connection with the website')
+        return
 
     if req.status_code == 404:
         print('Page not found')
@@ -118,4 +123,5 @@ if __name__ == '__main__':
 
     tv_series(path_tv, tv_list)
     anime(path_anime, anime_list)
+
 
