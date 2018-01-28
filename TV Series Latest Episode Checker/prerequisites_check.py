@@ -9,7 +9,7 @@ from urllib.request import urlopen
 # Checks if the computer is connected to the internet
 def is_internet_connected():
     try:
-        urlopen('http://216.58.192.142', timeout=1)     # '216.58.192.142' is one of the IPs of www.google.com
+        urlopen('http://216.58.192.142', timeout=1)  # '216.58.192.142' is one of the IPs of www.google.com
         return True
     except Exception:
         return False
