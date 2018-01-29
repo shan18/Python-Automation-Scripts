@@ -5,14 +5,12 @@
 import os
 import sys
 
-from datetime import datetime, timedelta
-
-from utils import is_internet_connected, path_check, zero_prefix, get_soup
+from utils import is_internet_connected, path_check, zero_prefix
 from new_episode_check import tv_episode_check, anime_episode_check
 
 
 # Browse the TV Series folder
-def tv_series(path, name_list):
+def tv_series(path, name_list, mode):
     print('\n\nchecking tv series...\n')
 
     for name in name_list:
@@ -31,55 +29,8 @@ def tv_series(path, name_list):
         tv_episode_check(
             series, season,
             'https://en.wikipedia.org/wiki/',
-            new_ep
+            mode, new_ep
         )
-    print('\n###########################################################')
-
-
-def tv_timed(name_list):
-    print('\n\nchecking tv series...\n')
-    base_url = 'https://en.wikipedia.org/wiki/'
-
-    for name in name_list:
-
-        series = ' '.join(name.split()[:-2])
-        season = int(name.split()[-1])
-        page_url = base_url + 'List_of_' + '_'.join(series.split()) + '_episodes'
-        soup = get_soup(page_url)
-
-        body = soup.find('div', {'class': 'mw-body', 'id': 'content'})
-        body_content = body.find('div', {'class': 'mw-body-content', 'id': 'bodyContent'})
-        tables = body_content.find_all(
-            'table', {'class': 'wikitable plainrowheaders wikiepisodetable'}
-        )  # list of tables of all the seasons
-        ep_list = tables[season - 1].find_all('tr', {'class': 'vevent'})
-
-        last_release = None
-        ep_num = ''
-        ep_title = ''
-        for ep_info in ep_list[::-1]:
-            ep_data = ep_info.find_all('td')
-            ep_views = ep_data[-1].text
-            if ep_views.upper() != 'TBD':
-                ep_num = ep_data[0].text
-                ep_title = ep_data[1].text
-                ep_release = ep_data[-3].text
-                last_release = ep_release[ep_release.find('(') + 1:-1]
-                break
-
-        if last_release is not None:
-            last_release = datetime.strptime(last_release, '%Y-%m-%d')  # convert from str to datetime
-            seven_days_before = datetime.now() - timedelta(days=7)
-            if seven_days_before < last_release:
-                print(
-                    series +
-                    ' Season ' +
-                    str(season) +
-                    ': ' +
-                    'Episode ' +
-                    ep_num + ' ' + ep_title
-                )
-
     print('\n###########################################################')
 
 
@@ -121,7 +72,7 @@ anime_list = [
 path_anime = '/media/shan/Local Disk/Anime/'
 path_tv = '/media/shan/Local Disk/TV/'
 
-# tv_series(path_tv, tv_list)
-anime(path_anime, anime_list)
+modes = ['Local File', 'Timed']
 
-tv_timed(tv_list)
+tv_series(path_tv, tv_list, modes[1])
+anime(path_anime, anime_list)

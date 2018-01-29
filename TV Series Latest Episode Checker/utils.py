@@ -44,6 +44,10 @@ def path_check(path, folder):
         os.mkdir(path + folder)
 
 
+def display(series, season, episode, title):
+    print(series, 'Season', season + ': Episode', episode, title)
+
+
 def download_file(file_name, url):
     """ Use this function if you want to download the episode from the terminal """
     req = requests.get(url)
