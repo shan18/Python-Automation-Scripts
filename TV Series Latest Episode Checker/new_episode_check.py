@@ -1,4 +1,4 @@
-""" This module checks if a new episode is available.
+""" This module checks if a new episode is available in 'Local File Mode'
 """
 
 from utils import get_soup
