@@ -1,20 +1,12 @@
-""" This script checks for the new episodes of TV series and anime and gives the download link
-    Enter the path name and the url of the website accordingly.
+""" This script checks for the new episodes of any TV series or anime.
+    Enter the path name accordingly.
 """
 
 import os
 import sys
 
-from prerequisites_check import is_internet_connected, path_check
+from utils import is_internet_connected, path_check, zero_prefix
 from new_episode_check import tv_episode_check, anime_episode_check
-
-
-# Numbers less than 10 should have '0' as a prefix
-def zero_prefix(num):
-    if num < 10:
-        return '0' + str(num)
-    else:
-        return str(num)
 
 
 # Browse the TV Series folder
