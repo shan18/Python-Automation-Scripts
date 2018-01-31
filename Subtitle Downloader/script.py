@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys
 import os
 import hashlib
@@ -15,22 +17,27 @@ def get_hash(name):
 
 
 def subtitle_download(file_path):
-    name, ext = os.path.splitext(file_path)
-    if ext not in [".avi", ".mp4", ".mkv", ".mpg", ".mpeg", ".mov", ".rm", ".vob", ".wmv", ".flv", ".3gp",".3g2"]:
-        return
+    try:
+        name, ext = os.path.splitext(file_path)
+        if ext not in [".avi", ".mp4", ".mkv", ".mpg", ".mpeg", ".mov", ".rm", ".vob", ".wmv", ".flv", ".3gp",".3g2"]:
+            return
 
-    subtitle_name = name + '.srt'
-    if not os.path.exists(subtitle_name):
-        headers = {'User-Agent': 'SubDB/1.0 (subtitle-download/1.0; https://github.com/shan18/)'}
-        url = 'http://sandbox.thesubdb.com/?action=download&hash=' + get_hash(file_path) + '&language=en'
-        req = urllib.request.Request(url, None, headers)
-        content = urllib.request.urlopen(req).read()
+        subtitle_name = name + '.srt'
+        if not os.path.exists(subtitle_name):
+            headers = {'User-Agent': 'SubDB/1.0 (subtitle-download/1.0; https://github.com/shan18/)'}
+            url = 'http://sandbox.thesubdb.com/?action=download&hash=' + get_hash(file_path) + '&language=en'
+            req = urllib.request.Request(url, None, headers)
+            content = urllib.request.urlopen(req).read()
 
-        with open(subtitle_name, 'wb') as subtitle:
-            subtitle.write(content)
+            with open(subtitle_name, 'wb') as subtitle:
+                subtitle.write(content)
+    except:
+        print('Cannot find subtitles for', file_path)
+        print('Error', sys.exc_info())
 
 
 if __name__ == '__main__':
+
     if len(sys.argv) == 1:
         print('Atleast one parameter required')
         sys.exit(1)
