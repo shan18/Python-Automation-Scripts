@@ -44,14 +44,14 @@ def main():
         print('Atleast one parameter required')
         sys.exit(1)
 
-    path = sys.argv[1]
-    if os.path.isdir(path):
-        for path_name, dirs, files in os.walk(path):
-            for file in files:
-                file_path = os.path.join(path_name, file)
-                subtitle_download(file_path)
-    else:
-        subtitle_download(path)
+    for path in sys.argv:
+        if os.path.isdir(path):
+            for path_name, dirs, files in os.walk(path):
+                for file in files:
+                    file_path = os.path.join(path_name, file)
+                    subtitle_download(file_path)
+        else:
+            subtitle_download(path)
 
 
 if __name__ == '__main__':
