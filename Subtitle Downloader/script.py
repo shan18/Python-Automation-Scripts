@@ -34,15 +34,25 @@ def subtitle_download(file_path):
             with open(subtitle_name, 'wb') as subtitle:
                 subtitle.write(content)
     except:
-        print('Cannot find subtitles for', file_path)
-        print('Error', sys.exc_info())
+        file_name = file_path.split('/')[-1]
+        print('Cannot find subtitles for', file_name)
+        # print('Error', sys.exc_info())
 
 
-if __name__ == '__main__':
-
+def main():
     if len(sys.argv) == 1:
         print('Atleast one parameter required')
         sys.exit(1)
 
-    video_path = sys.argv[1]
-    subtitle_download(video_path)
+    path = sys.argv[1]
+    if os.path.isdir(path):
+        for path_name, dirs, files in os.walk(path):
+            for file in files:
+                file_path = os.path.join(path_name, file)
+                subtitle_download(file_path)
+    else:
+        subtitle_download(path)
+
+
+if __name__ == '__main__':
+    main()
