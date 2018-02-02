@@ -3,6 +3,7 @@
 import sys
 import os
 import hashlib
+import logging
 import urllib.request
 
 
@@ -20,6 +21,7 @@ def subtitle_download(file_path):
     try:
         name, ext = os.path.splitext(file_path)
         if ext not in [".avi", ".mp4", ".mkv", ".mpg", ".mpeg", ".mov", ".rm", ".vob", ".wmv", ".flv", ".3gp",".3g2"]:
+            logging.info(ext + ' is not a valid video format.')
             return
 
         subtitle_name = name + '.srt'
@@ -33,18 +35,26 @@ def subtitle_download(file_path):
 
             with open(subtitle_name, 'wb') as subtitle:
                 subtitle.write(content)
+                logging.info('Downloaded subtitle for ' + name + ' successfully.')
+        else:
+            logging.info('Subtitle for ' + name + ' already exists.')
     except:
         file_name = file_path.split('/')[-1]
         print('Cannot find subtitles for', file_name)
+        logging.info('Cannot find subtitles for ' + file_name)
         # print('Error', sys.exc_info())
 
 
 def main():
+    script, _ = os.path.splitext(sys.argv[0])
+    logging.basicConfig(filename=script + '.log', level=logging.INFO)
+    logging.info("Parameters given: " + str(sys.argv))
+
     if len(sys.argv) == 1:
         print('Atleast one parameter required')
         sys.exit(1)
 
-    for path in sys.argv:
+    for path in sys.argv[1:]:
         if os.path.isdir(path):
             for path_name, dirs, files in os.walk(path):
                 for file in files:
